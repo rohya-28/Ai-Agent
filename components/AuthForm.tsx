@@ -13,17 +13,19 @@ import { Input } from "@/components/ui/input"
 import Link from "next/link"
 import { toast } from "sonner"
 import FormField from "./FormField"
+import { useRouter } from "next/navigation"
 
-const authFormSchema = (type : FormType ) => {
+const authFormSchema = (type: FormType) => {
   return z.object({
-    name: type === 'sign-up' ? z.string().min(3) : z.string().optional(),
+    name: type === "sign-up" ? z.string().min(3) : z.string().optional(),
     email: z.string().email(),
-    password: z.string().min(3),  
-  })
-}
+    password: z.string().min(3),
+  });
+};
 
 const AuthForm = ({ type }: { type: FormType })  => {
-
+  
+  const router = useRouter()
   const formSchema = authFormSchema(type);
 
 
@@ -36,14 +38,14 @@ const AuthForm = ({ type }: { type: FormType })  => {
     },
   })
  
-  // 2. Define a submit handler.
   function onSubmit(values: z.infer<typeof formSchema>) {
      try {
       if (type === 'sign-up') {
-        console.log("SIGN UP", values);
+        toast.success('Account Created SuccessFully')
+        router.push('/sign-in')
       } else {
-        console.log("SIGN IN", values);
-        
+        toast.success('Sign In SuccessFully')
+        router.push('/')
       }
       
      } catch (error) {
